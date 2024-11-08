@@ -1,0 +1,20 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Избранные точки - Fish Hunter{% endblock %}
+{% block content %}
+  <div class="container mt-4">
+    <h1>Избранные точки</h1>
+    {% if favorites %}
+      {% for favorite in favorites %}
+        <div class="d-flex justify-content-between mb-4">
+          <h2 class="list-group-item">
+            <a href="{% url 'point_detail' favorite.point.id %}">{{ favorite.point.name }}</a>
+          </h2>
+          <a href="{% url 'point_type' favorite.point.type %}"
+             class="btn btn-success">{{ favorite.point.get_type_display }}</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>У Вас пока нет избранных точек</p>
+    {% endif %}
+  </div>
+{% endblock %}

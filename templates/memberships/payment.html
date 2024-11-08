@@ -1,0 +1,16 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Оплата - FH Club{% endblock %}
+{% block content %}
+  <h2 class="mb-3">Оплата членского билета</h2>
+  {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+  {% if membership and membership.status == "paid" %}
+    <div class="alert alert-success">
+      <h4>Билет №{{ membership.number }} успешно оплачен!</h4>
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      <h4>Что-то пошло не так...</h4>
+    </div>
+  {% endif %}
+  <a class="btn btn-success btn-lg mt-3" href="{% url 'index' %}">Перейти на главную</a>
+{% endblock %}

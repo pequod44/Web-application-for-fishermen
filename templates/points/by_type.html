@@ -1,0 +1,18 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Точки типа {{ point_type }} - Fish Hunter{% endblock %}
+{% block content %}
+  <div class="container mt-4">
+    <h1>Точки типа "{{ point_type }}"</h1>
+    {% if points %}
+      {% for point in points %}
+        <div class="alert alert-warning" role="alert">
+          <h3>
+            <a href="{% url 'point_detail' point.id %}">{{ point.name }}</a>
+          </h3>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Нет точек данного типа</p>
+    {% endif %}
+  </div>
+{% endblock %}

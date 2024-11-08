@@ -1,0 +1,31 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Статус заявки - FH Club{% endblock %}
+{% block content %}
+  <h2 class="mb-3">Информация о FH Club билете</h2>
+  {% if membership %}
+    <div class="mb-3">
+      <h5>
+        Билет: <span class="text-muted">№{{ membership.number }}</span>
+      </h5>
+      <h5>
+        Статус: <span class="text-muted">{{ membership.get_status_display }}</span>
+      </h5>
+    </div>
+    {% if membership.status == 'approved' or membership.status == 'expired' %}
+      <div class="alert alert-info mb-3">
+        {% if membership.status == 'approved' %}
+          <p>Данные подтверждены, требуется оплата</p>
+        {% elif membership.status == 'expired' %}
+          <p>Действие членского билета истекло. Пожалуйста, оплатите взнос для продления</p>
+        {% endif %}
+      </div>
+      <a class="btn btn-success mb-3"
+         href="{% url 'membership_payment' membership.id %}">Оплатить взнос</a>
+    {% endif %}
+    {% if membership.status == 'paid' %}<p class="mb-3">Срок действия: {{ membership.expiry_date }}</p>{% endif %}
+  {% else %}
+    <h4 class="mb-3 alert alert-info">Вы ещё не являетесь участником FH Club</h4>
+    <a class="btn btn-primary btn-lg mb-3"
+       href="{% url 'membership_send' %}">Присоединиться</a>
+  {% endif %}
+{% endblock %}

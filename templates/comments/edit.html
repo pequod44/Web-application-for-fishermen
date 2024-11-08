@@ -1,0 +1,13 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Редактировать комментарий - Fish Hunter{% endblock %}
+{% block content %}
+  <div class="container mt-4">
+    <h1>Редактировать комментарий</h1>
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+  </div>
+{% endblock %}

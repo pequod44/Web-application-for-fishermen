@@ -1,0 +1,30 @@
+{% extends 'smartfishing/base.html' %}
+{% load static %}
+{% block content %}
+  <div class="row">
+    <div class="text-center">
+      <h1 class="mb-4">
+        {% if object %}
+          Редактировать
+        {% else %}
+          Добавить
+        {% endif %}
+        запрещенную зону
+      </h1>
+    </div>
+    <form method="post" class="needs-validation" novalidate>
+      <div class="col-md-9">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="mb-3">
+          {{ form.name.label_tag }}
+          {{ form.name }}
+        </div>
+        <div class="mb-3">{{ form.boundary }}</div>
+      </div>
+      <div class="col-md-4">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Регистрация{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="post">
+    {% csrf_token %}{{ form|crispy }}
+    <p>
+      Есть аккаунт? <a href="/login">Войти</a>
+    </p>
+    <button type="submit" class="btn btn-success">Регистрация</button>
+  </form>
+{% endblock %}

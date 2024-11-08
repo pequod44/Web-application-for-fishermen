@@ -1,0 +1,12 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Войти{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <form method="post">
+    {% csrf_token %}{{ form|crispy }}
+    <p>
+      Нет аккаунта? <a href="/sign-up">Создать аккаунт</a>
+    </p>
+    <button type="submit" class="btn btn-success">Войти</button>
+  </form>
+{% endblock %}

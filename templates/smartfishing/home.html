@@ -1,0 +1,12 @@
+{% extends 'smartfishing/base.html' %}
+{% block content %}
+  <div class="row text-center">
+    <h1>Время на природе: рыбалка и охота!</h1>
+    <div class="col-lg-9 col-md-9 mx-auto">
+      <img class="img-fluid rounded mb-2"
+           src="https://img.freepik.com/free-photo/fishermen-having-well-deserved-break_329181-19865.jpg?t=st=1716115587~exp=1716119187~hmac=1780d170a1eed7cfcbef951e91366599d89c9e1d3cee30694cf1bc190aca637e&w=1380"
+           alt="men-hunting">
+      <a class="btn btn-primary my-2" href="{% url 'show_map' %}">Открыть карту</a>
+    </div>
+  </div>
+{% endblock %}

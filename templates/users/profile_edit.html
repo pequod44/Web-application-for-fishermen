@@ -1,0 +1,25 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Личный кабинет{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h2 class="mb-3">Редактировать профиль</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="card mb-3">
+      <div class="card-header">
+        <h3 class="card-title">Личная информация</h3>
+      </div>
+      <div class="card-body">{{ user_form|crispy }}</div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header">
+        <h3 class="card-title">Членский билет</h3>
+      </div>
+      <div class="card-body">
+        {{ membership_form|crispy }}
+        {% if error %}<div class="alert alert-danger mt-3">{{ error }}</div>{% endif %}
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+  </form>
+{% endblock %}

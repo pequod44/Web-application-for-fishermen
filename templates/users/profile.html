@@ -1,0 +1,73 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Профиль - {{ user.username }}{% endblock %}
+{% block content %}
+  <h2 class="mb-3">Личный кабинет</h2>
+  <div class="row">
+    <div class="{% if membership %}col-md-6{% else %}col-md-12{% endif %} mb-3">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Личная информация</h3>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Фамилия:</strong> {{ user.last_name }}
+          </p>
+          <p>
+            <strong>Имя:</strong> {{ user.first_name }}
+          </p>
+          <p>
+            <strong>Отчество:</strong> {{ user.patronymic }}
+          </p>
+          <p>
+            <strong>Дата рождения:</strong> {{ user.date_of_birth }}
+          </p>
+          {% if user.phone %}
+            <p>
+              <strong>Телефон:</strong> {{ user.phone }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if membership and membership.status == 'paid' %}
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Членский билет</h3>
+          </div>
+          <div class="card-body">
+            <h4 class="text-muted">№{{ membership.number }}</h4>
+            <p>
+              <strong>Статус:</strong> {{ membership.get_status_display }}
+            </p>
+            <p>
+              <strong>Срок действия:</strong> {{ membership.expiry_date }}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать профиль</a>
+  {% if not membership %}
+    <a href="{% url 'membership_send' %}" class="btn btn-success">Получить новый членский билет</a>
+  {% elif membership.status != 'paid' %}
+    <a href="{% url 'membership_status' %}" class="btn btn-warning">Проверить статус</a>
+  {% endif %}
+  <div class="col-md-6 mb-3">
+    {% if points %}
+      <h2 class="mt-3">Ваши точки</h2>
+      {% for point in points %}
+        <div class="d-flex justify-content-between mb-4">
+          <h3 class="list-group-item">
+            <a href="{% url 'point_detail' point.id %}">{{ point.name }}</a>
+          </h3>
+          <a href="{% url 'point_type' point.type %}" class="btn btn-success">{{ point.get_type_display }}</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h2 class="mt-3">У Вас пока нет точек</h2>
+      <a href="{% url 'show_map' %}" class="btn btn-success btn-lg">Создайте Вашу первую точку</a>
+    {% endif %}
+  </div>
+{% endblock %}

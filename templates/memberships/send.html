@@ -1,0 +1,15 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Подать заявку - FH Club{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h2 class="mb-3">Заявка на членский билет</h2>
+  {% if error %}
+    <div class="alert alert-danger mb-3">{{ error }}</div>
+    <a class="btn btn-warning mb-3" href="{% url 'membership_status' %}">Проверить статус</a>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">{{ membership_form|crispy }}</div>
+    <button type="submit" class="btn btn-primary">Отправить заявку</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Архив точек{% endblock %}
+{% block content %}
+  <h1>Архив точек</h1>
+  {% if archives %}
+    <ul>
+      {% for point in archives %}
+        <div class="alert alert-secondary" role="alert">
+          <h4>
+            <a class="text-muted" href="{% url 'point_detail' point.id %}">{{ point.name }}</a>
+          </h4>
+        </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас нет архивных точек.</p>
+  {% endif %}
+{% endblock %}

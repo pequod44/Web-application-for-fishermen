@@ -1,0 +1,97 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}{{ point.name }} - Fish Hunter{% endblock %}
+{% block content %}
+  <div class="container mt-4">
+    {% if messages %}
+      <div>
+        {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <h1>{{ point.name }}</h1>
+    <h5>
+      Автор: <span>@{{ point.user.username }}</span>
+    </h5>
+    <strong>Тип:</strong>
+    <a href="{% url 'point_type' point.type %}">{{ point.get_type_display }}</a>
+    <p>
+      <strong>Описание:</strong> {{ point.description }}
+    </p>
+    <p>
+      <strong>Координаты:</strong> ({{ point.coordinates }})
+    </p>
+    {% if point.image %}
+      <div>
+        <img src="{{ point.image.url }}"
+             class="img-thumbnail rounded mb-3"
+             width="300px"
+             height="300px"
+             alt="Point Image">
+      </div>
+    {% endif %}
+    <p>
+      <strong>Рейтинг:</strong> {{ avg_rating }}
+    </p>
+    <form action="{% url 'add_to_favorites' point.id %}" method="post">
+      {% csrf_token %}
+      <div class="justify-content-between d-flex">
+        <button type="submit" class="btn btn-danger">
+          {% if is_favorite %}
+            Удалить из избранного
+          {% else %}
+            Добавить в избранное
+          {% endif %}
+        </button>
+      </div>
+    </form>
+    <div class="justify-content-between d-flex">
+      {% if request.user == point.user or request.user.is_superuser %}
+        <a href="{% url 'edit_point' point.id %}" class="btn btn-primary mt-3">Редактировать точку</a>
+        <form action="{% url 'delete_point' point.id %}"
+              method="post"
+              class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger mt-3">Удалить точку</button>
+        </form>
+      {% endif %}
+    </div>
+    <h3 class="mt-4">Комментарии</h3>
+    <div>
+      {% for comment in comments %}
+        <div class="mb-2">
+          <strong>@{{ comment.user.username }} | <small class="text-muted">{{ comment.created_at }}</small></strong>
+          <p>{{ comment.message }}</p>
+          {% if request.user == comment.user or request.user.is_superuser %}
+            <a href="{% url 'edit_comment' point.id comment.id %}"
+               class="btn btn-primary btn-sm">Редактировать</a>
+            <form action="{% url 'delete_comment' point.id comment.id %}"
+                  method="post"
+                  class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <h4 class="mt-4">Добавить комментарий</h4>
+    <form action="{% url 'add_comment' point.id %}" method="post">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit" class="btn btn-success">Отправить</button>
+    </form>
+    <h4 class="mt-4">Пожаловаться на точку</h4>
+    <form action="{% url 'point_detail' point.id %}" method="post">
+      {% csrf_token %}
+      {{ report_form.as_p }}
+      <button type="submit" class="btn btn-warning" name="report_point">Пожаловаться</button>
+    </form>
+    <h4 class="mt-4">Оценить точку</h4>
+    <form action="{% url 'point_detail' point.id %}" method="post">
+      {% csrf_token %}
+      {{ rating_form.as_p }}
+      <button type="submit" class="btn btn-info" name="rate_point">Оценить</button>
+    </form>
+  </div>
+{% endblock %}

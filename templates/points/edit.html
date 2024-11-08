@@ -1,0 +1,16 @@
+{% extends 'smartfishing/base.html' %}
+{% load static %}
+{% block title %}Редактировать {{ point.name }} - Fish Hunter{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Редактировать {{ point.name }}</h1>
+    <form action="{% url 'edit_point' point.id %}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'smartfishing/base.html' %}
+{% load static %}
+{% block title %}Карта локаций - Fish Hunter{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <h1 class="text-center mt-5 mb-4">Карта</h1>
+    <div class="col-md-12 mb-3">
+      <select id="point-type-filter" class="form-select">
+        <option value="">Все типы</option>
+        <option value="fishing">Рыбная</option>
+        <option value="hunting">Охотничья</option>
+        <option value="camping">Туристическая база</option>
+      </select>
+    </div>
+    <div id="error-container" class="alert alert-danger d-none"></div>
+    <div id="map" class="rounded" style="height: 70vh;"></div>
+    <form method="post"
+          id="post-form"
+          enctype="multipart/form-data"
+          class="mt-4">
+      {% csrf_token %}
+      <div class="offcanvas offcanvas-start"
+           tabindex="-1"
+           id="offcanvasWithBothOptions"
+           aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Создание новой локации</h5>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div class="mb-3">
+            <input type="hidden" id="coordinates" name="coordinates" value="">
+            <input type="text"
+                   id="point_name"
+                   name="name"
+                   class="form-control"
+                   placeholder="Наименование точки"
+                   aria-label="Recipient's username"
+                   aria-describedby="button-addon2">
+          </div>
+          <div class="mb-3">
+            <textarea id="description"
+                      name="description"
+                      class="form-control"
+                      placeholder="Описание"
+                      aria-label="Recipient's username"
+                      aria-describedby="button-addon2"
+                      cols="30"
+                      rows="10"></textarea>
+          </div>
+          <div class="mb-3">
+            <select class="form-select" id="type" name="type">
+              <option value="fishing">Рыбная</option>
+              <option value="hunting">Охотничья</option>
+              {% if request.user.is_staff %}
+                <option value="camping">Туристическая база</option>
+              {% endif %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="formFileMultiple" class="form-label">Загрузить изображение</label>
+            <input class="form-control"
+                   type="file"
+                   id="formFileMultiple"
+                   name="image"
+                   multiple>
+          </div>
+          <button type="submit" class="btn btn-success mt-3">Сохранить точку</button>
+        </div>
+      </div>
+    </form>
+    <div class="offcanvas offcanvas-start"
+         tabindex="-1"
+         id="point-info"
+         aria-labelledby="offcanvasWithBothOptionsLabel"
+         data-bs-backdrop="false">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="point-infoLabel">Информация о локации</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="mb-3">
+          <h4 id="point-name"></h4>
+          <div class="d-flex">
+            <h5 id="point-author"></h5>
+            &nbsp;&#124;&nbsp;
+            <h5 id="point-type" class="badge rounded-pill bg-warning text-dark"></h5>
+          </div>
+          <p id="point-description" class="form-control-plaintext"></p>
+        </div>
+        <div class="mb-3">
+          <h5>Координаты:</h5>
+          <p id="point-coordinates" class="form-control-plaintext"></p>
+        </div>
+        <div id="point-image-container" class="mb-3">
+          <img id="point-image"
+               class="img-fluid rounded mb-3"
+               src=""
+               alt="Point Image">
+        </div>
+        <hr>
+        <div id="comment-container" class="mb-3"></div>
+        <hr>
+        <form id="comment-form" data-point-id="">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="comment" class="form-label">Добавить комментарий</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+      </div>
+    </div>
+    <div class="text-center">
+      <button id="show-all-points"
+              class="btn btn-primary btn-lg mt-3"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#point-info-all"
+              aria-controls="point-info-all">Показать список локаций</button>
+    </div>
+    <div class="offcanvas offcanvas-start"
+         tabindex="-1"
+         id="point-info-all"
+         aria-labelledby="point-info-allLabel"
+         data-bs-backdrop="false">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="point-info-allLabel">Список локаций</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+      </div>
+      <div class="container mt-3">
+        <div class="row">
+          <div class="col-md-9">
+            <select id="sort-criteria" class="form-select">
+              <option value="">Выберите критерий сортировки</option>
+              <option value="name">Название</option>
+              <option value="type">Тип</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="offcanvas-body" id="point-list"></div>
+    </div>
+  </div>
+  <script src="{% static 'map/js/mapScript.js' %}"></script>
+{% endblock %}

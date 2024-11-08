@@ -1,0 +1,12 @@
+{% extends 'smartfishing/base.html' %}
+{% block title %}Оплата - FH Club{% endblock %}
+{% load static %}
+{% block content %}
+  <h2 class="mb-3">Оплата членского билета</h2>
+  <img src="{% static 'taskQR.jpeg' %}" alt="QR">
+  <p>Отсканируйте QR-код чтобы оплатить взнос</p>
+  <form method="post" action="{% url 'membership_payment' membership.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Оплатить</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,14 @@
+[flake8]
+extend-ignore = E203
+exclude =
+    .git,
+    */migrations/,
+    */__pycache__/,
+    */env,
+    */venv,
+    .pytest_cache,
+    .vscode,
+    .idea,
+    settings.py,
+    manage.py,
+max-complexity = 10

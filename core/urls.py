@@ -1,0 +1,176 @@
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+
+from smartfishing.admin_views import ReportListView, ReportView
+from smartfishing.views import (
+    AddCommentView,
+    AddToFavoriteView,
+    ArchivePointsView,
+    DeleteCommentView,
+    DeletePointView,
+    EditCommentView,
+    EditPointView,
+    FavoritePointListView,
+    ForbiddenZoneCreateView,
+    ForbiddenZoneListView,
+    ForbiddenZoneUpdateView,
+    HomePageView,
+    MapPageView,
+    PointDetailView,
+    PointTypeView,
+    SignUpView,
+)
+from users.views import (
+    MembershipApplicationView,
+    MembershipPaymentView,
+    MembershipStatusView,
+    MembershipVerifyView,
+    ProfileEditView,
+    ProfileView,
+)
+
+urlpatterns = [
+    path(
+        "admin/report/",
+        ReportView.as_view(),
+        name="admin_report",
+    ),
+    path(
+        "admin/reports/",
+        ReportListView.as_view(),
+        name="reports_list",
+    ),
+    path("admin/", admin.site.urls),
+    path(
+        "",
+        HomePageView.as_view(),
+        name="index",
+    ),
+    path(
+        "api/",
+        include("api.urls"),
+        name="api",
+    ),
+    path(
+        "map/",
+        MapPageView.as_view(),
+        name="show_map",
+    ),
+    path(
+        "sign-up/",
+        SignUpView.as_view(),
+        name="sign_up",
+    ),
+    path(
+        "profile/",
+        ProfileView.as_view(),
+        name="profile",
+    ),
+    path(
+        "profile/edit/",
+        ProfileEditView.as_view(),
+        name="profile_edit",
+    ),
+    path(
+        "membership/send/",
+        MembershipApplicationView.as_view(),
+        name="membership_send",
+    ),
+    path(
+        "membership/status/<int:membership_id>/",
+        MembershipVerifyView.as_view(),
+        name="membership_payment",
+    ),
+    path(
+        "membership/status/",
+        MembershipStatusView.as_view(),
+        name="membership_status",
+    ),
+    path(
+        "membership/<int:membership_id>/payment/",
+        MembershipPaymentView.as_view(),
+        name="membership_payment",
+    ),
+    path(
+        "points/<int:point_id>/favorites/",
+        AddToFavoriteView.as_view(),
+        name="add_to_favorites",
+    ),
+    path(
+        "points/<int:point_id>/",
+        PointDetailView.as_view(),
+        name="point_detail",
+    ),
+    path(
+        "points/<int:point_id>/comments/",
+        AddCommentView.as_view(),
+        name="add_comment",
+    ),
+    path(
+        "points/<int:point_id>/edit/",
+        EditPointView.as_view(),
+        name="edit_point",
+    ),
+    path(
+        "zones/",
+        ForbiddenZoneListView.as_view(),
+        name="forbidden_zone_list",
+    ),
+    path(
+        "zones/add/",
+        ForbiddenZoneCreateView.as_view(),
+        name="forbidden_zone_add",
+    ),
+    path(
+        "zones/<int:pk>/edit/",
+        ForbiddenZoneUpdateView.as_view(),
+        name="forbidden_zone_edit",
+    ),
+    path(
+        "points/<int:point_id>/comments/<int:comment_id>/edit/",
+        EditCommentView.as_view(),
+        name="edit_comment",
+    ),
+    path(
+        "points/<int:point_id>/comments/<int:comment_id>/delete/",
+        DeleteCommentView.as_view(),
+        name="delete_comment",
+    ),
+    path(
+        "points/<int:point_id>/delete/",
+        DeletePointView.as_view(),
+        name="delete_point",
+    ),
+    path(
+        "points/favorites/",
+        FavoritePointListView.as_view(),
+        name="favorites",
+    ),
+    path(
+        "points/archives/",
+        ArchivePointsView.as_view(),
+        name="archives",
+    ),
+    path(
+        "points/<str:point_type>/",
+        PointTypeView.as_view(),
+        name="point_type",
+    ),
+    path(
+        "",
+        include("django.contrib.auth.urls"),
+        name="login",
+    ),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATIC_ROOT,
+    )
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT,
+    )
